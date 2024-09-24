@@ -3,12 +3,36 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const cors = require('cors');
+const allowedOrigins = ['http://localhost:3000', 'https://time-tracker-tc6d.vercel.app'];
 
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+
+    // Only allow requests from origins in the list
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // Set to true if using cookies or authentication
+};
+/*const corsOptions = {
+  origin: 'https://time-tracker-tc6d.vercel.app',  // Your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // If your requests include credentials like cookies or HTTP authentication
+};*/
 // Enable CORS for all routes
 
 dotenv.config();
 const app = express();
-app.use(cors())
+app.use(cors(corsOptions))
+app.options('*', cors());  // Preflight all routes
 
 // Other middleware and routes
 //app.use(express.json());
