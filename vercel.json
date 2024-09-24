@@ -1,0 +1,14 @@
+{
+    "version": 2,
+    "functions": {
+          "To-do-API/server.js": {
+            "maxDuration": 60
+          }
+        },
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/api"
+      }
+    ]
+  }
